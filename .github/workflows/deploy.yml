@@ -37,7 +37,7 @@ jobs:
         with:
           path: ./dist # Default output directory for Vite
 
-deploy:
+  deploy: # Corrected indentation
     needs: build
     runs-on: ubuntu-latest
     environment:
