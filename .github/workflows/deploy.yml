@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -24,13 +26,12 @@ jobs:
           node-version: '20' # Or your preferred Node.js version
 
       - name: Install dependencies
-        run: npm install # Or yarn install / pnpm install if you use a different package manager
+        run: npm ci # Use npm ci for cleaner and faster installs in CI
 
       - name: Build project
         # The base path should match your repository name for GitHub Pages
         run: npm run build -- --base=/Portfolio/
-        env:
-          CI: false
+        # CI=true is typically the default and preferred in CI environments
 
       - name: Upload production-ready build files
         uses: actions/upload-pages-artifact@v3
