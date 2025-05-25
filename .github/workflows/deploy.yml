@@ -12,39 +12,20 @@ permissions:
   id-token: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20' # Or your preferred Node.js version
-
-      - name: Install dependencies
-        run: npm ci # Use npm ci for cleaner and faster installs in CI
-
-      - name: Build project
-        # The base path should match your repository name for GitHub Pages
-        run: npm run build -- --base=/Portfolio/
-        # CI=true is typically the default and preferred in CI environments
-
-      - name: Upload production-ready build files
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist # Default output directory for Vite
-
-  deploy: # Corrected indentation
-    needs: build
+  deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
